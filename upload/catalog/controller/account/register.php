@@ -27,6 +27,8 @@ class ControllerAccountRegister extends Controller {
 
 			unset($this->session->data['guest']);
 
+			$this->session->data['csrf_token'] = token(32);
+
 			// Add to activity log
 			if ($this->config->get('config_customer_activity')) {
 				$this->load->model('account/activity');
