@@ -35,3 +35,4 @@ $_['error_city']         = 'City must be between 2 and 128 characters!';
 $_['error_country']      = 'Please select a country!';
 $_['error_zone']         = 'Please select a region / state!';
 $_['error_custom_field'] = '%s required!';
+$_['error_csrf_token']   = 'Invalid token session.';
