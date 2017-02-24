@@ -1,5 +1,7 @@
 <?php
 class ControllerAccountNewsletter extends Controller {
+	private $error = array();
+
 	public function index() {
 		if (!$this->customer->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('account/newsletter', '', true);
@@ -11,7 +13,7 @@ class ControllerAccountNewsletter extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		if ($this->request->server['REQUEST_METHOD'] == 'POST') {
+		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->load->model('account/customer');
 
 			$this->model_account_customer->editNewsletter($this->request->post['newsletter']);
@@ -61,6 +63,21 @@ class ControllerAccountNewsletter extends Controller {
 		$data['footer'] = $this->load->controller('common/footer');
 		$data['header'] = $this->load->controller('common/header');
 
+		if (isset($this->error['csrf_token'])) {
+			$data['error_csrf_token'] = $this->error['csrf_token'];
+		} else {
+			$data['error_csrf_token'] = '';
+		}
+		$data['csrf_token'] = $this->session->data['csrf_token'];
+
 		$this->response->setOutput($this->load->view('account/newsletter', $data));
+	}
+
+	protected function validate() {
+		if ($this->request->post['csrf_token'] != $this->session->data['csrf_token']) {
+			$this->error['csrf_token'] = $this->language->get('error_csrf_token');
+		}
+
+		return !$this->error;
 	}
 }
