@@ -37,6 +37,8 @@ class ControllerAccountLogin extends Controller {
 					$this->session->data['shipping_address'] = $this->model_account_address->getAddress($this->customer->getAddressId());
 				}
 
+				$this->session->data['csrf_token'] = token(32);
+
 				$this->response->redirect($this->url->link('account/account', '', true));
 			}
 		}
